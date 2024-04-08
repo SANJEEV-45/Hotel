@@ -21,16 +21,11 @@ const HotelValidation = () => {
   const [fields, setFields] = useState([]);
   const [pageApi, setPageApi] = useState(1);
   const [totalPages, setTotalPages] = useState("");
-  const [editedRows, setEditedRows] = useState([]);
   
   const inputField = (inputs) => {
     setFields(inputs);
   };
-  const updatedRows = (rows) =>{
-    setEditedRows(rows);
-  }
 
-  console.log("Rows update :",editedRows);
 
   //Hitting API
   const handleSearch = async () => {
@@ -49,15 +44,6 @@ const HotelValidation = () => {
       });
   };
 
-  const handleSaveChanges = async () => {
-    try {
-      await axios.put('http://127.0.0.1:8000/api/update', editedRows);
-      setEditedRows([]);
-    } catch (error) {
-      console.error('Error saving changes:', error);
-      alert('Error saving changes. Please try again.');
-    }
-  };
 
   console.log("before home");
   useEffect(() => {
@@ -146,7 +132,7 @@ const HotelValidation = () => {
             <BaseDataTable data={datas} />
           </Grid>
           <Grid item xs={8} height={500} mt={3}>
-            <EditableDataGrid data={datas} stateFromEditTable={updatedRows} />
+            <EditableDataGrid data={datas} />
             <Pagination
               count={totalPages}
               defaultPage={1}
@@ -163,7 +149,7 @@ const HotelValidation = () => {
               mb={3}
               sx={{ display: "flex", justifyContent: "center" }}
             >
-              <Button variant="contained" onClick={handleSaveChanges}>Save Changes</Button>
+              <Button variant="contained"> Save Changes</Button>
             </Box>
           </Grid>
         </Grid>
