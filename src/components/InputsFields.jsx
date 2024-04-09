@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from "react";
 import "../index.css";
-import axios from "axios";
 import {
     Button,
     TextField,
@@ -12,22 +11,18 @@ import {
 
 const InputFields = ({ StatefromInput }) => {
     const [fields, setFields] = useState([]);
-    const [filter, setFilter] = useState("none");
+    const [filter, setFilter] = useState('');
    
-    console.log('before inputfields');
-
-    useEffect(()=>{
-        StatefromInput(fields);
-    },[fields])
-    
-    console.log('after inputfields');
-
     const handleFields = (e) => {
         const name = e.target.name;
         const value = e.target.value;
         setFields((values) => ({ ...values, [name]: value }));
-        StatefromInput(fields);
     };
+    const handleFilter = (e) =>{
+        handleFields(e);
+        setFilter(e.target.value);
+        console.log(fields);
+    }
 
     return (
         <>
@@ -47,7 +42,7 @@ const InputFields = ({ StatefromInput }) => {
                 onChange={handleFields}
             />
             <TextField
-                label="grid number"
+                label="Grid number"
                 name="grid_number"
                 style={{ width: "12rem" }}
                 InputProps={{ style: { borderRadius: "3rem",backgroundColor:'#D2E3EA' } }}
@@ -61,14 +56,14 @@ const InputFields = ({ StatefromInput }) => {
                 onChange={handleFields}
             />
             <TextField
-                label="hotel Name"
+                label="Hotel Name"
                 name="name"
                 style={{ width: "12rem" }}
                 InputProps={{ style: { borderRadius: "3rem",backgroundColor:'#D2E3EA' } }}
                 onChange={handleFields}
             />
             <Button
-                //onClick={handleSearch}
+                onClick={()=>StatefromInput(fields)}
                 variant="contained"
                 size="large"
                 sx={{ width: "8rem", height: "3.3rem" }}
@@ -84,8 +79,9 @@ const InputFields = ({ StatefromInput }) => {
                     style={{ minWidth: "10rem", borderRadius: "3rem" }}
                     label="Filter"
                     name="validation"
+                    onChange={handleFilter}
                 >
-                    <MenuItem value={"none"}>None</MenuItem>
+                    <MenuItem value={''}>None</MenuItem>
                     <MenuItem value={"Id duplication"}>ID Duplication</MenuItem>
                     <MenuItem value={"Id accumulation"}>
                         ID Accumulation

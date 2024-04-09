@@ -1,24 +1,50 @@
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import axios from 'axios'
+import IconButton from '@mui/material/IconButton'
+import DeleteIcon from '@mui/icons-material/Delete';
+import '../index.css';
 
-const EditableDataGrid = ( {data} ) => {
+
+const EditableDataGrid = ( {data, stateFromEditTable} ) => {
   const [selectedRows, setSelectedRows] = useState([]);
 
-   const handleSaveChanges = async (newRow) => {
-    console.log(newRow['ind']);
-    try {
-      await axios.put('http://127.0.0.1:8000/api/update', newRow);
-      alert('Sucessfully changed');
-    } catch (error) {
-      console.error('Error saving changes:', error);
-      alert('Error saving changes. Please try again.');
-    }
+  const handleSelectionChange = (newSelection) => {
+    setSelectedRows(newSelection);
   };
+  console.log(selectedRows);
+  function isNumeric(n1){
+     const n = parseInt(n1);
+     if(isNaN(n)){
+      return false;
+     }
+     console.log(n);
+     const uniqueIdRegex = /^[0-9]+$/;
+     return uniqueIdRegex.test(n);
 
-    const handleRowSelection = (selectionRowsId) =>{
-         selectionRowsId.rowsId
+     const handleUpdateRow = (newRow)=>{
+      const uniqueId = newRow.unique_id;
+      if(isNumeric(uniqueId) || uniqueId === 'N' || uniqueId === 'n'){
+        editOrDelete(Row);
+     }
+     else{
+      alert("Trying to update a invalid format");
     }
+  }
+    const editOrDelete = async (Row) =>{
+       try{
+        
+        await axios.put('http://127.0.0.1:8000/api/update',Row)
+        .then((response)=>{
+        alert(response.data.message);
+        });
+      }
+       catch(error){
+        console.error(error);
+        alert("Error saving changes!..Please try again");
+       }
+    }
+  
 
     const HotelSearchColumn = [
         {
@@ -40,9 +66,12 @@ const EditableDataGrid = ( {data} ) => {
             headerClassName:'custom-header'
         },
     ];
-
+    function getRowClassName(params) {
+      return params.id % 2 === 0 ? 'even-row' : 'odd-row';
+    }
+ 
   return (
-    <>
+    <div className="EditDataGrid">
       <DataGrid
         sx={{
           "& .super-app-theme--header": {
@@ -55,13 +84,24 @@ const EditableDataGrid = ( {data} ) => {
         rows={data.map((user) => ({ ...user, ind: user.ind + 1 }))}
         pageSize={10}
         checkboxSelection
+        getRowClassName={getRowClassName}
         disableRowSelectionOnClick
         pageSizeOptions={[]}
         autoPageSize
-        processRowUpdate={(newRow)=>{handleSaveChanges(newRow)}}
-        onRowSelectionModelChange={handleRowSelection}
+        processRowUpdate={(newRow)=>{handleUpdateRow(newRow)}}
+        onRowSelectionModelChange={handleSelectionChange}        
       />
-    </>
+      {selectedRows.length > 0 && (
+        <IconButton
+          style={{ position: 'absolute', bottom: '10px', right: '10px' }}
+          onClick={() => {
+            handleUpdateRow(selectedRows);
+          }}
+        >
+          <DeleteIcon fontSize="1.5rem" color="primary"/>
+        </IconButton>
+      )}
+    </div>
   );
 };
 

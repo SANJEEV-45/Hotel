@@ -6,7 +6,39 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.TextField{
+  border-radius: 10px; /* Set your desired border radius here */
+}
+.MuiDataGrid-columnHeaderTitleContainer{
+  background-color: #afccd8
+}
+.custom-header{
+border-right: 1px solid #020202; 
+background-color: #afccd8;
+}
 
+.custom-cell-class {
+border-right: 1px solid #131111; 
+}
+.MuiDataGrid-selectedRowCount{
+position:absolute;
+right: 8%;
+font-size: 1rem;
+}
+.MuiTablePagination-displayedRows, .MuiTablePagination-actions{
+display: none;
+}
+.EditDataGrid{
+height: 400px;
+position: relative;
+width: 100%;
+}
+.odd-row{
+background-color: rgb(150, 173, 188);
+}
+.even-row{
+background-color: rgb(216, 215, 215);
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

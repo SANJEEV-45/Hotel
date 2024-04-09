@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from "react-goo";
 import { Map, GoogleApiWrapper, Marker } from "google-maps-react";
 
 class MyContainer extends Component {

@@ -7,13 +7,12 @@ import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
 import TableComponent from "./TableComponent";
-import MapComponent from "../Map";
 import axios from "axios";
 import { Box, Button, Pagination, Typography } from "@mui/material";
 import ReferenceFields from "./ReferenceFields";
 import BaseDataTable from "./BaseDataTable";
-import Map from "../Map";
 import EditableDataGrid from "./EditableDataGrid";
+
 
 const HotelValidation = () => {
   const [datas, setDatas] = useState([]);
@@ -21,6 +20,7 @@ const HotelValidation = () => {
   const [fields, setFields] = useState([]);
   const [pageApi, setPageApi] = useState(1);
   const [totalPages, setTotalPages] = useState("");
+
   
   const inputField = (inputs) => {
     setFields(inputs);
@@ -30,20 +30,18 @@ const HotelValidation = () => {
   //Hitting API
   const handleSearch = async () => {
     //Fetching values of Grid Numbers and UNique Ids
-    await axios
-      .post(`http://127.0.0.1:8000/api/filter?page=${pageApi}`, fields)
+    await axios.post(`http://127.0.0.1:8000/api/filter?page=${pageApi}`, fields)
       .then((response) => {
         setDatas(response.data.data.data);
         setTotalPages(response.data.pages);
         setDataCount(response.data.count);
-        console.log(totalPages);
+        console.log("Pages:",totalPages);
         console.log(dataCount);
       })
       .catch((error) => {
         console.error(error);
       });
   };
-
 
   console.log("before home");
   useEffect(() => {
@@ -79,23 +77,28 @@ const HotelValidation = () => {
           justifyContent={"space-between"}
           flexWrap={"wrap"}
         >
-          <Grid item xs={7.5} style={{maxHeight:'450px'}}>
+          <Grid item xs={7.5} style={{maxHeight:'500px'}}>
             <Stack
               flexDirection={"row"}
               justifyContent={"space-between"}        
               flexWrap={"wrap-reverse"}
             >
               <TableComponent  dataCount={dataCount}  />
+              
             </Stack>
             <DataGridComponent data={datas} totalPages={totalPages}/>
             <Pagination
               count={totalPages}
               onChange={(e, value) => setPageApi(value)}
               style={{marginTop:'-2.7rem'}}
+              color="primary"
             />
           </Grid>
           <Grid item xs={4}>
-            <MapComponent data={datas} />
+                <Typography align="center" variant="h5" color="black" marginTop={1}>
+                     Map View
+                </Typography>
+                
           </Grid>
         </Grid>
       </Container>
@@ -135,21 +138,22 @@ const HotelValidation = () => {
             <EditableDataGrid data={datas} />
             <Pagination
               count={totalPages}
-              defaultPage={1}
-              onChange={(e, value) =>{setPageApi(value)}}
+              onChange={(e, value) => setPageApi(value)}
               style={{marginTop:'-2.7rem'}}
+              color="primary"
             />
           </Grid>
           <Grid item xs={3.7}>
-            <Box marginTop={"-2rem"} sx={{ height: "400px" }}>
-              <Map data={datas} />
+            <Box marginTop={"-2rem"} sx={{ height: "400px" }} >
+                <Typography align="center" variant="h5" color="black" marginTop={1}>
+                     Map View
+                 </Typography>
             </Box>
             <Box
               mt={5}
               mb={3}
               sx={{ display: "flex", justifyContent: "center" }}
             >
-              <Button variant="contained"> Save Changes</Button>
             </Box>
           </Grid>
         </Grid>
